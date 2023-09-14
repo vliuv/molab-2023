@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='5.0' target-platform='ios' buildActiveScheme='true' importAppTypes='true'>
-    <timeline fileName='timeline.xctimeline'/>
+<playground version='6.0' target-platform='ios' buildActiveScheme='true' importAppTypes='true'>
+    <pages>
+        <page name='Day01'/>
+        <page name='Day02'/>
+        <page name='Day03'/>
+        <page name='Day04'/>
+        <page name='Day05'/>
+        <page name='Day06'/>
+        <page name='Day07'/>
+        <page name='Text Art'/>
+    </pages>
 </playground>
