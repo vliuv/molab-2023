@@ -14,13 +14,9 @@ import SwiftUI
 let listColor = Color(red: 205/255, green: 214/255, blue: 250/255)
 let txtColor = Color(red: 43/255, green: 47/255, blue: 61/255)
 
-//UINavigationBar.appearance().titleTextAttributes = attrs
-
-
 struct ContentView: View {
     var body: some View {
         VStack {
-//            Text("Select a Location").padding(20).font(.title)
 //            backgroundColor
             
 //questions
