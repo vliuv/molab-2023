@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "title": "fruits"
+            "items": [
+                "apple",
+                "orange",
+                "grape"
+            ]
+        },
+        {
+            "title": "cars"
+            "items": [
+                "bmw",
+                "honda",
+                "kia"
+            ]
+        },
+        {
+            "title": "states"
+            "items": [
+                "ny",
+                "florida",
+                "cali"
+            ]
+        }
+    ]
+}
