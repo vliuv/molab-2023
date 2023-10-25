@@ -44,6 +44,7 @@ struct AddImageView: View {
                     withAnimation {
                         let _ = document.addItem(label: label, systemName1: systemName1, systemName2: systemName2, systemName3: systemName3, systemName4: systemName4)
                         document.save("items.json")
+                        dismiss()
                     }
                 }
                 Spacer()

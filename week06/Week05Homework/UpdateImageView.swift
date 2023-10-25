@@ -47,11 +47,13 @@ struct UpdateImageView: View {
                     print("UpdateImageView Update")
                     document.updateItem(id: id, label: label, systemName1: systemName1, systemName2: systemName2, systemName3: systemName3, systemName4: systemName4)
                     document.save("items.json")
+                    dismiss()
                 }
                 Spacer()
                 Button("Delete") {
                     document.model.delete(id)
                     document.save("items.json")
+                    dismiss()
                 }
             }.padding(.horizontal, 35)
             Form {

@@ -60,11 +60,11 @@ struct ContentView: View {
             
         }
     }
-    
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            let model = Document()
-            ContentView().environmentObject(model)
-        }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        let model = Document()
+        ContentView().environmentObject(model)
     }
 }
