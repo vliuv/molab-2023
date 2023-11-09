@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCH83XfBVs2VVmq2nN2K6evumLOznEvjl8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>835278594666</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vyl2007.grocr</string>
+	<key>PROJECT_ID</key>
+	<string>grocr-fed44</string>
+	<key>STORAGE_BUCKET</key>
+	<string>grocr-fed44.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:835278594666:ios:69c746723ded0c037f6013</string>
+	<key>DATABASE_URL</key>
+	<string>https://grocr-fed44-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
