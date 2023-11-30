@@ -21,7 +21,9 @@ struct ImagePicker: UIViewControllerRepresentable {
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             picker.dismiss(animated: true)
 
-            guard let provider = results.first?.itemProvider else { return }
+            guard let provider = results.first?.itemProvider else {
+                loadingModel.loading = false
+                return }
 
             if provider.canLoadObject(ofClass: UIImage.self) {
                 provider.loadObject(ofClass: UIImage.self) { image, _ in

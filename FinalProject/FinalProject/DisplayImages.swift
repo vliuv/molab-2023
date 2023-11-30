@@ -25,18 +25,22 @@ struct DisplayImages: View {
                     Section {
                         // Display in reverse order to see new additions first
                         ForEach(document.model.items.reversed()) { item in
+                            
                             NavigationLink(
                                 destination:
-                                    ItemDetail(filename: item.label, thisImg: loadImageFromDiskWith(fileName: item.label)!)
+                                    ItemDetail(filename: item.label, avgImg: loadImageFromDiskWith(fileName: item.label)!, emjImg: loadImageFromDiskWith(fileName: item.label+"emoji")!)
                             )
                             {
-                                let thisImg = loadImageFromDiskWith(fileName: item.label)
+                                let avgImg = loadImageFromDiskWith(fileName: item.label)
+                                let emjImg = loadImageFromDiskWith(fileName: item.label+"emoji")
                                 HStack {
 //                                    Text("\(document.model.itemIndex(id: item.id)!)")
 //                                    Text("\(item.id)")
                                     Text(item.label)
                                     Spacer()
-                                    Image(uiImage: thisImg!).resizable()
+                                    Image(uiImage: avgImg!).resizable()
+                                        .aspectRatio(contentMode: .fill).frame(width: 80, height: 80).clipped()
+                                    Image(uiImage: emjImg!).resizable()
                                         .aspectRatio(contentMode: .fill).frame(width: 80, height: 80).clipped()
                                 }
                             }
@@ -68,12 +72,15 @@ struct ItemDetail: View {
     @EnvironmentObject var document:Document
     
     var filename: String
-    var thisImg: UIImage
+    var avgImg: UIImage
+    var emjImg: UIImage
     
     var body: some View {
         VStack {
             Text("\(filename)")
-            Image(uiImage: thisImg).resizable()
+            Image(uiImage: avgImg).resizable()
+                .aspectRatio(contentMode: .fill).frame(width: 200, height: 200).clipped()
+            Image(uiImage: emjImg).resizable()
                 .aspectRatio(contentMode: .fill).frame(width: 200, height: 200).clipped()
         }
     }
@@ -83,9 +90,9 @@ struct ItemDetail: View {
 
 struct DisplayImages_Previews: PreviewProvider {
     static var previews: some View {
-        DisplayImages().environmentObject(model)
-        ItemDetail(filename: String(), thisImg: UIImage()).environmentObject(model)
-        MainView().environmentObject(model)
+        DisplayImages().environmentObject(model).environmentObject(loadingModel)
+        ItemDetail(filename: String(), avgImg: UIImage(), emjImg: UIImage()).environmentObject(model).environmentObject(loadingModel)
+        MainView().environmentObject(model).environmentObject(loadingModel)
     }
 }
 

@@ -11,7 +11,14 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 import SwiftUI
 
+class LoadingModel: ObservableObject {
+    @Published var loading = false
+}
+
 struct ContentView: View {
+    
+//    @State private var loading = false
+    
     @State private var image: Image?
 
     @State private var showingImagePicker = false
@@ -26,10 +33,14 @@ struct ContentView: View {
     
     let context = CIContext()
     
+    let bgCol = Color(red: 1, green: 1, blue: 1)
+    
     @EnvironmentObject var document:Document
+    @EnvironmentObject var loadingModel:LoadingModel
 
     var body: some View {
         
+        ZStack{
             VStack {
                 if (image != nil) {
                     Text("Tap the image to select a new picture")
@@ -59,7 +70,7 @@ struct ContentView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
                             
-                            Image(uiImage: averageImg!)
+                            Image(uiImage: emojiImg!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
                             
@@ -77,21 +88,20 @@ struct ContentView: View {
                 }
                 .onTapGesture {
                     showingImagePicker = true
+                    image = nil
+                    loadingModel.loading = true
                 }
                 
                 Spacer()
                 
                 if (image != nil){
-                    
-//                    Form {
-                        TextField("Label this image", text: $label)
-                            .textInputAutocapitalization(.never)
-                            .disableAutocorrection(true)
-                            .textFieldStyle(.roundedBorder)
-                            .padding(.bottom, 13.0)
-//                    }
 
-                    
+                    TextField("Label this image", text: $label)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.bottom, 13.0)
+
                     HStack {
                         Button("Save to photos", action: save).buttonStyle(.bordered)
                         Spacer()
@@ -115,6 +125,7 @@ struct ContentView: View {
                                 if (!repeated && !blank) {
                                     let _ = document.addItem(label: label)
                                     saveImage(imageName: label, image: averageImg!)
+                                    saveImage(imageName: label+"emoji", image: emojiImg!)
                                     document.save("items.json")
                                     
                                     image = nil
@@ -123,28 +134,40 @@ struct ContentView: View {
                                     emojiImg = nil
 
                                     label = ""
-                                    
                                 }
                             }
                         }.buttonStyle(.borderedProminent)
                     }
                 }
-    
+
             }
             .padding([.horizontal, .bottom])
             .onChange(of: inputImage) { _ in loadImage()
                 averageImg = renderAverage()
+                emojiImg = renderEmojis()
             }
         
             .sheet(isPresented: $showingImagePicker) {
                 ImagePicker(image: $inputImage)
             }
+            
+            
+            if (loadingModel.loading){
+                ZStack {
+                    bgCol
+                    VStack {
+                        ProgressView()
+                        Text("Abstracting your image...")
+                    }
+                }.ignoresSafeArea()
+            }
+        }
         
     }
     
     func renderAverage() -> UIImage {
-        let width = 200;
-        let height = 200;
+        let width = 160;
+        let height = 160;
         let sz = CGSize(width: width, height: height)
         let renderer = UIGraphicsImageRenderer(size: sz)
         let image = renderer.image { context in
@@ -158,6 +181,146 @@ struct ContentView: View {
         return image;
     }
     
+    func renderEmojis() -> UIImage {
+        let width = 200;
+        let height = 200;
+        let sz = CGSize(width: width, height: height)
+        let renderer = UIGraphicsImageRenderer(size: sz)
+        let image = renderer.image { context in
+            for numX in 0...7 {
+                for numY in 0...7 {
+                    let thisCol = getHsb(Color(inputImage?.averageColor(offsetX: numX, offsetY: numY) ?? UIColor.black))
+                    let thisHue = thisCol.0*360
+                    let thisBri = thisCol.2*100
+                    
+                    let emojiAdd = getEmoji(thisHue, thisBri)
+                    
+                    let font = UIFont.systemFont(ofSize: CGFloat(width/8))
+                    let displayEmoji = NSAttributedString(string: emojiAdd, attributes: [.font: font ])
+                    displayEmoji.draw(at: CGPoint(x: width/8*numX-1, y: height-height/8*(numY+1)-3))
+                }
+            }
+        }
+        loadingModel.loading = false
+        return image;
+    }
+    
+    func getHsb(_ col: Color) -> (CGFloat, CGFloat, CGFloat, CGFloat) {
+            var hue: CGFloat  = 0.0
+            var saturation: CGFloat = 0.0
+            var brightness: CGFloat = 0.0
+            var alpha: CGFloat = 0.0
+            
+            let uiColor = UIColor(col)
+            uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+            
+            return (hue, saturation, brightness, alpha)
+    }
+    
+    func getEmoji(_ thisHue: CGFloat, _ thisBri: CGFloat) -> String {
+        var emojiAdd: String
+        
+        if thisHue > 335 || thisHue < 5 {
+            if thisBri < 33 {
+                emojiAdd = "🛢️"
+            } else if thisBri > 66 {
+                emojiAdd = "🎟️"
+            } else {
+                emojiAdd = "🔴"
+            }
+        } else if thisHue < 35 {
+            if thisBri < 33 {
+                emojiAdd = "🧶"
+            } else if thisBri > 66 {
+                emojiAdd = "🐡"
+            } else {
+                emojiAdd = "🟠"
+            }
+        } else if thisHue < 65 {
+            if thisBri < 33 {
+                emojiAdd = "🏆"
+            } else if thisBri > 66 {
+                emojiAdd = "🌝"
+            } else {
+                emojiAdd = "🟡"
+            }
+        } else if thisHue < 95 {
+            if thisBri < 33 {
+                emojiAdd = "🫒"
+            } else if thisBri > 66 {
+                emojiAdd = "🥑"
+            } else {
+                emojiAdd = "🎾"
+            }
+        } else if thisHue < 125 {
+            if thisBri < 33 {
+                emojiAdd = "🫑"
+            } else if thisBri > 66 {
+                emojiAdd = "🍈"
+            } else {
+                emojiAdd = "🍏"
+            }
+        } else if thisHue < 155 {
+            if thisBri < 33 {
+                emojiAdd = "🥦"
+            } else if thisBri > 66 {
+                emojiAdd = "🧩"
+            } else {
+                emojiAdd = "🟢"
+            }
+        } else if thisHue < 185 {
+            if thisBri < 33 {
+                emojiAdd = "🪣"
+            } else if thisBri > 66 {
+                emojiAdd = "⚗️"
+            } else {
+                emojiAdd = "🧼"
+            }
+        } else if thisHue < 215 {
+            if thisBri < 33 {
+                emojiAdd = "🌃"
+            } else if thisBri > 66 {
+                emojiAdd = "🐬"
+            } else {
+                emojiAdd = "🥶"
+            }
+        } else if thisHue < 245 {
+            if thisBri < 33 {
+                emojiAdd = "🌑"
+            } else if thisBri > 66 {
+                emojiAdd = "🩵"
+            } else {
+                emojiAdd = "🔵"
+            }
+        } else if thisHue < 275 {
+            if thisBri < 33 {
+                emojiAdd = "👾"
+            } else if thisBri > 66 {
+                emojiAdd = "👚"
+            } else {
+                emojiAdd = "🟣"
+            }
+        } else if thisHue < 305 {
+            if thisBri < 33 {
+                emojiAdd = "🍇"
+            } else if thisBri > 66 {
+                emojiAdd = "🌸"
+            } else {
+                emojiAdd = "🩷"
+            }
+        } else {
+            if thisBri < 33 {
+                emojiAdd = "🐙"
+            } else if thisBri > 66 {
+                emojiAdd = "🐽"
+            } else {
+                emojiAdd = "🌺"
+            }
+        }
+        
+        return emojiAdd
+    }
+    
 
     func loadImage() {
         guard let inputImage = inputImage else { return }
@@ -166,6 +329,7 @@ struct ContentView: View {
 
     func save() {
         guard let averageImage = averageImg else { return }
+        guard let emojiImage = emojiImg else { return }
         
         let imageSaver = ImageSaver()
         imageSaver.successHandler = {
@@ -175,6 +339,7 @@ struct ContentView: View {
             print("Oops! \($0.localizedDescription)")
         }
         imageSaver.writeToPhotoAlbum(image: averageImage)
+        imageSaver.writeToPhotoAlbum(image: emojiImage)
     }
     
 }
@@ -214,7 +379,7 @@ extension UIImage {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(model)
-        MainView().environmentObject(model)
+        ContentView().environmentObject(model).environmentObject(loadingModel)
+        MainView().environmentObject(model).environmentObject(loadingModel)
     }
 }

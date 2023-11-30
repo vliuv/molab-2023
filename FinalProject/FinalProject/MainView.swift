@@ -9,10 +9,12 @@ import Foundation
 import SwiftUI
 
 let model = Document()
+let loadingModel = LoadingModel()
 
 struct MainView: View {
     
     @EnvironmentObject var document:Document
+    @EnvironmentObject var loadingModel: LoadingModel
     
     var body: some View {
         TabView {
@@ -33,7 +35,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView().environmentObject(model)
+        MainView().environmentObject(model).environmentObject(loadingModel)
     }
 }
 
