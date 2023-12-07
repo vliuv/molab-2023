@@ -15,9 +15,9 @@ class LoadingModel: ObservableObject {
     @Published var loading = false
 }
 
+let gradient = LinearGradient(colors: [Color(red:176/255, green:124/255, blue:252/255), Color(red:124/255, green:147/255, blue:252/255)], startPoint: .top, endPoint: .bottom)
+
 struct ContentView: View {
-    
-//    @State private var loading = false
     
     @State private var image: Image?
 
@@ -37,74 +37,94 @@ struct ContentView: View {
     
     @EnvironmentObject var document:Document
     @EnvironmentObject var loadingModel:LoadingModel
-
+    
     var body: some View {
         
         ZStack{
+            ZStack{
             VStack {
                 if (image != nil) {
                     Text("Tap the image to select a new picture")
-                        .padding(.top, 20.0).font(.subheadline)
+                        .foregroundStyle(.white).bold()
+                        .frame(maxWidth: .infinity).frame(height: 60.0)
+                        .background(Rectangle().fill(gradient).cornerRadius(10)).padding(.bottom, 4.0)
                 } else {
-                    Text("Color Breakdown").padding(.top, 40.0).font(.title)
+                    Text("EMOJI ABSTRACTION").font(.title2).tracking(4)
+                        .foregroundStyle(.white).bold()
+                        .frame(maxWidth: .infinity).frame(height: 80.0)
+                        .background(Rectangle().fill(gradient).cornerRadius(10)).padding(.bottom, 4.0)
                 }
                 Spacer()
                 ZStack {
                     if (image == nil) {
-                        Rectangle()
-                            .fill(.blue.opacity(0.2)).frame(width: 240, height: 50).cornerRadius(10)
-                        
                         Text("Tap to select a picture")
-                            .foregroundColor(.blue)
-                            .font(.headline)
-                    }
+                            .foregroundColor(.white).font(.title3).tracking(2)
+                            .frame(maxWidth: .infinity).frame(maxHeight: .infinity)
+                            .background(Rectangle().fill(Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)).cornerRadius(10))
+                        }
                     
-                    VStack {
-                        if (image != nil) {
-
+                    if (image != nil) {
+                        VStack {
                             Image(uiImage: inputImage!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160).clipped()
+                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170).clipped()
                             
                             Image(uiImage: averageImg!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
+                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170)
                             
                             Image(uiImage: emojiImg!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
-                            
-                            
-                            if (repeated) {
-                                Text("Pick a unique label")
-                            }
-                            
-                            if (blank){
-                                Text("Please add a label for your image")
-                            }
-                            
-                        }
+                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170)
+                        }.frame(maxWidth: .infinity).frame(maxHeight: .infinity)
+                            .background(Rectangle().fill(.white).cornerRadius(10).shadow(radius: 2))
                     }
                 }
                 .onTapGesture {
                     showingImagePicker = true
                     image = nil
                     loadingModel.loading = true
+                    label = ""
+                    repeated = false
+                    blank = false
                 }
                 
                 Spacer()
                 
                 if (image != nil){
+                    
+                    if (repeated) {
+                        Text("Pick a unique label").foregroundColor(.gray).font(.callout).italic()
+                    }
+                    
+                    if (blank){
+                        Text("Please add a label for your image").foregroundColor(.gray).font(.callout).italic()
+                    }
 
                     TextField("Label this image", text: $label)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.bottom, 13.0)
+                        .textFieldStyle(.plain)
+                        .padding(.horizontal)
+                        .font(.body)
+                        .frame(maxWidth: .infinity).frame(height: 40)
+                        .background(Rectangle().fill(Color(red: 0.9, green: 0.9, blue: 0.9).opacity(0.9)).cornerRadius(6))
 
                     HStack {
-                        Button("Save to photos", action: save).buttonStyle(.bordered)
+                        Button("Clear image"){
+                            withAnimation{
+                                image = nil
+                                inputImage = nil
+                                averageImg = nil
+                                emojiImg = nil
+
+                                label = ""
+                                
+                            }
+                        }.padding(.horizontal)
                         Spacer()
+                        Button("Download", action: save).buttonStyle(.bordered)
+                        
                         Button("Add to collection") {
                             withAnimation {
                                 for item in document.model.items {
@@ -128,12 +148,12 @@ struct ContentView: View {
                                     saveImage(imageName: label+"emoji", image: emojiImg!)
                                     document.save("items.json")
                                     
-                                    image = nil
-                                    inputImage = nil
-                                    averageImg = nil
-                                    emojiImg = nil
-
-                                    label = ""
+//                                    image = nil
+//                                    inputImage = nil
+//                                    averageImg = nil
+//                                    emojiImg = nil
+//
+//                                    label = ""
                                 }
                             }
                         }.buttonStyle(.borderedProminent)
@@ -141,7 +161,7 @@ struct ContentView: View {
                 }
 
             }
-            .padding([.horizontal, .bottom])
+            .padding(.all)
             .onChange(of: inputImage) { _ in loadImage()
                 averageImg = renderAverage()
                 emojiImg = renderEmojis()
@@ -151,19 +171,25 @@ struct ContentView: View {
                 ImagePicker(image: $inputImage)
             }
             
-            
             if (loadingModel.loading){
                 ZStack {
                     bgCol
                     VStack {
-                        ProgressView()
-                        Text("Abstracting your image...")
-                    }
-                }.ignoresSafeArea()
+                        Image(systemName: "paintpalette")
+                                .renderingMode(.original)
+                                .font(.system(size: 100))
+                                .padding(.bottom, 40)
+                        ProgressView().padding(.bottom, 30).tint(.white).scaleEffect(1.6)
+                        Text("ABSTRACTING YOUR IMAGE...").bold()
+                    }.foregroundColor(.white).font(.subheadline).tracking(4)
+                        .frame(maxWidth: .infinity).frame(maxHeight: .infinity)
+                        .background(Rectangle().fill(Color(red: 0.1, green: 0.1, blue: 0.1).opacity(0.9)).cornerRadius(10))
+                }
+                .padding(.all)
             }
-        }
-        
+        }}
     }
+
     
     func renderAverage() -> UIImage {
         let width = 160;
@@ -174,7 +200,7 @@ struct ContentView: View {
             for numX in 0...7 {
                 for numY in 0...7 {
                     (inputImage?.averageColor(offsetX: numX, offsetY: numY) ?? UIColor.black).setFill()
-                    context.fill(CGRect(x: width/8*numX+1, y: height-height/8*(numY+1), width: width/8+1, height: width/8))
+                    context.fill(CGRect(x: width/8*numX-1, y: height-height/8*(numY+1), width: width/8, height: width/8))
                 }
             }
         }

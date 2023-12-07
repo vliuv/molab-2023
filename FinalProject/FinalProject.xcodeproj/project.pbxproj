@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FCDAD382B1AF48900F510FD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCDAD372B1AF48900F510FD /* AboutView.swift */; };
 		0FFE651C2B0288A80080FF12 /* FinalProjectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFE651B2B0288A80080FF12 /* FinalProjectApp.swift */; };
 		0FFE651E2B0288A80080FF12 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFE651D2B0288A80080FF12 /* ContentView.swift */; };
 		0FFE65202B0288A90080FF12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FFE651F2B0288A90080FF12 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0FCDAD372B1AF48900F510FD /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		0FFE65182B0288A80080FF12 /* FinalProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinalProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FFE651B2B0288A80080FF12 /* FinalProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalProjectApp.swift; sourceTree = "<group>"; };
 		0FFE651D2B0288A80080FF12 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				0FFE65292B0288F20080FF12 /* MainView.swift */,
 				0FFE651D2B0288A80080FF12 /* ContentView.swift */,
 				0FFE652B2B02893F0080FF12 /* DisplayImages.swift */,
+				0FCDAD372B1AF48900F510FD /* AboutView.swift */,
 				0FFE652D2B02895E0080FF12 /* ImageFileSave.swift */,
 				0FFE652F2B0289700080FF12 /* Document.swift */,
 				0FFE65312B0289830080FF12 /* ItemModel.swift */,
@@ -163,6 +166,7 @@
 			files = (
 				0FFE651E2B0288A80080FF12 /* ContentView.swift in Sources */,
 				0FFE652E2B02895E0080FF12 /* ImageFileSave.swift in Sources */,
+				0FCDAD382B1AF48900F510FD /* AboutView.swift in Sources */,
 				0FFE65302B0289700080FF12 /* Document.swift in Sources */,
 				0FFE652A2B0288F20080FF12 /* MainView.swift in Sources */,
 				0FFE65362B0289A50080FF12 /* ImageSaver.swift in Sources */,

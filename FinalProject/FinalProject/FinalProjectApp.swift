@@ -11,7 +11,7 @@ import SwiftUI
 struct FinalProjectApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView().environmentObject(model)
+            MainView().environmentObject(model).environmentObject(loadingModel)
         }
     }
 }

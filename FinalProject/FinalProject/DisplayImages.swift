@@ -14,8 +14,6 @@ import SwiftUI
 
 struct DisplayImages: View {
     
-    let context = CIContext()
-    
     @EnvironmentObject var document:Document
     
     var body: some View {
@@ -34,8 +32,6 @@ struct DisplayImages: View {
                                 let avgImg = loadImageFromDiskWith(fileName: item.label)
                                 let emjImg = loadImageFromDiskWith(fileName: item.label+"emoji")
                                 HStack {
-//                                    Text("\(document.model.itemIndex(id: item.id)!)")
-//                                    Text("\(item.id)")
                                     Text(item.label)
                                     Spacer()
                                     Image(uiImage: avgImg!).resizable()
@@ -55,12 +51,10 @@ struct DisplayImages: View {
                         }
                     } header: {
                         Text("Image Collection").padding(.top).font(.headline)
-                    } footer: {
-                        //                Text("Pick an existing image collection or add your own at the top right.")
                     }
                     
-                }.navigationTitle("").toolbar {
-                    EditButton()
+                }.background(gradient.opacity(0.25)).scrollContentBackground(.hidden).navigationTitle("").toolbar {
+                    EditButton().buttonStyle(.bordered)
                 }
             }
         }
@@ -74,19 +68,28 @@ struct ItemDetail: View {
     var filename: String
     var avgImg: UIImage
     var emjImg: UIImage
-    
+//    Color(red: 0.1, green: 0.1, blue: 0.1
+          
     var body: some View {
         VStack {
-            Text("\(filename)")
-            Image(uiImage: avgImg).resizable()
-                .aspectRatio(contentMode: .fill).frame(width: 200, height: 200).clipped()
-            Image(uiImage: emjImg).resizable()
-                .aspectRatio(contentMode: .fill).frame(width: 200, height: 200).clipped()
-        }
+            Text("\(filename)").font(.title2).tracking(4)
+                .foregroundStyle(.white).bold()
+                .frame(maxWidth: .infinity).frame(height: 60.0)
+                .background(Rectangle().fill(gradient.opacity(0.9)).cornerRadius(10)).padding(.bottom, 4)
+            Spacer()
+            ZStack{
+                VStack{
+                    Image(uiImage: avgImg).resizable()
+                        .aspectRatio(contentMode: .fill).frame(width: 240, height: 240).clipped()
+                    Image(uiImage: emjImg).resizable()
+                        .aspectRatio(contentMode: .fill).frame(width: 240, height: 240).clipped()
+                }.frame(maxWidth: .infinity).frame(maxHeight: .infinity)
+                    .background(Rectangle().fill(.white).cornerRadius(10).shadow(radius: 2))
+            }
+            Spacer()
+        }.padding(.all)
     }
 }
-
-
 
 struct DisplayImages_Previews: PreviewProvider {
     static var previews: some View {

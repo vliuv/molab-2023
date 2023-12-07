@@ -20,12 +20,16 @@ struct MainView: View {
         TabView {
             ContentView()
                 .tabItem {
-                    Label("Image", systemImage: "photo")
+                    Label("Create", systemImage: "paintbrush.pointed")
                 }
 
             DisplayImages()
                 .tabItem {
-                    Label("Collection", systemImage: "folder")
+                    Label("Collection", systemImage: "photo.on.rectangle.angled")
+                }
+            AboutView()
+                .tabItem {
+                    Label("About", systemImage: "info.circle")
                 }
         }.onAppear {
             document.restore("items.json")
