@@ -6,6 +6,7 @@
 //
 
 //https://www.hackingwithswift.com/example-code/media/how-to-read-the-average-color-of-a-uiimage-using-ciareaaverage
+//https://swdevnotes.com/swift/2023/convert-color-from-rgb-to-hsb-in-swift/
 
 import CoreImage
 import CoreImage.CIFilterBuiltins
@@ -223,7 +224,11 @@ struct ContentView: View {
                     
                     let font = UIFont.systemFont(ofSize: CGFloat(width/8))
                     let displayEmoji = NSAttributedString(string: emojiAdd, attributes: [.font: font ])
-                    displayEmoji.draw(at: CGPoint(x: width/8*numX-1, y: height-height/8*(numY+1)-3))
+                    if(inputImage!.size.width > inputImage!.size.height){
+                        displayEmoji.draw(at: CGPoint(x: width/8*numX-1, y: height-height/8*(numY+1)-3))
+                    }else{
+                        displayEmoji.draw(at: CGPoint(x: width/8*numX-1, y: height-height/8*(numY+1)-3))
+                    }
                 }
             }
         }

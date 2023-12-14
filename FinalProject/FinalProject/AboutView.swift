@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 struct AboutView: View {
-    @State private var testColor = Color(red:176/255, green:124/255, blue:252/255)
+    @State private var testColor = Color(red:0.8, green:0.8, blue:0.8)
     
-    @State private var testEmoji = ""
+    @State private var testEmoji = "❔"
     
     var body: some View {
         VStack(alignment: .leading){
@@ -20,13 +20,18 @@ struct AboutView: View {
                 .frame(maxWidth: .infinity).frame(height: 80.0)
                 .background(Rectangle().fill(gradient).cornerRadius(10)).padding(.bottom, 4.0)
             Text("How it works:").fontWeight(.bold).padding(.vertical)
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sollicitudin sapien sed sodales sodales. Fusce sit amet molestie mauris, eu gravida ante. Phasellus pretium facilisis neque eget luctus. Suspendisse et viverra lacus. Quisque eu lobortis dui, vel malesuada tortor. Cras gravida sem imperdiet, rhoncus turpis eu, interdum risus. Praesent sit amet nulla lacinia, finibus diam eu, scelerisque enim. Suspendisse vitae dolor nunc.")
+            Text("This app takes your uploaded images and breaks it down into a 8x8 grid of squares and finds the average color of each square.").padding(.bottom)
+            Text("It then takes all 64 of those average colors and looks at both the hue & brightness to get an emoji approximation.").padding(.bottom)
+            Text("Use the color picker below to test out some color to emoji conversions!")
                 .padding(.bottom)
             ColorPicker("Pick a color", selection: $testColor).fontWeight(.bold).onChange(of: testColor) { testColor in
                 let testHsb = getHsb(testColor)
                 testEmoji = getEmoji(testHsb.0*360, testHsb.2*100)
             }
-            Rectangle().fill(testColor).cornerRadius(10)
+            HStack{
+                Text(testEmoji).font(.title).scaleEffect(6.0).frame(maxWidth: .infinity).frame(maxHeight: .infinity)
+                    .background(Rectangle().fill(testColor).frame(maxWidth: .infinity).frame(maxHeight: .infinity).cornerRadius(10))
+            }
         }.padding(.all)
     }
     
