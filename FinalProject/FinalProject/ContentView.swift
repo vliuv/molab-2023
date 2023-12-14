@@ -68,15 +68,15 @@ struct ContentView: View {
                         VStack {
                             Image(uiImage: inputImage!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170).clipped()
+                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160).clipped()
                             
                             Image(uiImage: averageImg!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170)
+                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
                             
                             Image(uiImage: emojiImg!)
                                 .resizable()
-                                .aspectRatio(contentMode: .fill).frame(width: 170, height: 170)
+                                .aspectRatio(contentMode: .fill).frame(width: 160, height: 160)
                         }.frame(maxWidth: .infinity).frame(maxHeight: .infinity)
                             .background(Rectangle().fill(.white).cornerRadius(10).shadow(radius: 2))
                     }
@@ -112,7 +112,7 @@ struct ContentView: View {
                         .background(Rectangle().fill(Color(red: 0.9, green: 0.9, blue: 0.9).opacity(0.9)).cornerRadius(6))
 
                     HStack {
-                        Button("Clear image"){
+                        Button("Clear"){
                             withAnimation{
                                 image = nil
                                 inputImage = nil
